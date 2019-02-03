@@ -16,11 +16,11 @@
 //==============================================================================
 /**
 */
-class WaylochorderAudioProcessorEditor  : public AudioProcessorEditor
+class WayloMidiLatchAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    WaylochorderAudioProcessorEditor (WaylochorderAudioProcessor&);
-    ~WaylochorderAudioProcessorEditor();
+    WayloMidiLatchAudioProcessorEditor (WayloMidiLatchAudioProcessor&);
+    ~WayloMidiLatchAudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -29,7 +29,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    WaylochorderAudioProcessor& processor;
+    WayloMidiLatchAudioProcessor& processor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaylochorderAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WayloMidiLatchAudioProcessorEditor)
 };

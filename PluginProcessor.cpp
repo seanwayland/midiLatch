@@ -1,12 +1,12 @@
 /*
- ==============================================================================
- 
- This file was auto-generated!
- 
- It contains the basic framework code for a JUCE plugin processor.
- 
- ==============================================================================
- */
+  ==============================================================================
+
+    This file was auto-generated!
+
+    It contains the basic framework code for a JUCE plugin processor.
+
+  ==============================================================================
+*/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -15,24 +15,22 @@
 
 using namespace std;
 
-
 //==============================================================================
-WaylochorderAudioProcessor::WaylochorderAudioProcessor()
+WayloMidiLatchAudioProcessor::WayloMidiLatchAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-: AudioProcessor (BusesProperties()
-                  
-#if ! JucePlugin_IsMidiEffect
-#if ! JucePlugin_IsSynth
-                  .withInput  ("Input",  AudioChannelSet::stereo(), true)
-#endif
-                  .withOutput ("Output", AudioChannelSet::stereo(), true)
-#endif
-                  )
+     : AudioProcessor (BusesProperties()
+                     #if ! JucePlugin_IsMidiEffect
+                      #if ! JucePlugin_IsSynth
+                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
+                      #endif
+                       .withOutput ("Output", AudioChannelSet::stereo(), true)
+                     #endif
+                       )
 #endif
 {
 }
 
-WaylochorderAudioProcessor::~WaylochorderAudioProcessor()
+WayloMidiLatchAudioProcessor::~WayloMidiLatchAudioProcessor()
 {
 }
 
@@ -48,105 +46,70 @@ int lastNote = 0;
 bool sustaindown = false;
 double startTime (Time::getMillisecondCounterHiRes() * 0.001);
 
-vector<int> chord;
-// initialize the chord array to 3 chords
-vector< vector<int> > chords {
-    { 41, 48 , 55, 56, 58, 63 },
-    { 44 , 51 , 56, 58 , 61, 63 },
-    { 42 , 49, 56, 60 , 61 , 65 },
-    {48, 49, 56 , 58 , 63 },
-    { 51, 52, 59, 61, 68 },
-    {39, 46, 58, 63, 67, 68 } ,
-    { 48, 58 , 63 , 65, 68 },
-    {41, 48, 58 , 63, 67 } ,
-    {41, 48, 57, 62, 65 },
-    { 41, 48 , 55, 56, 58, 63 },
-    { 44 , 51 , 56, 58 , 61, 63 },
-    { 42 , 49, 56, 60 , 61 , 65 },
-    {48, 49, 56 , 58 , 63 },
-    { 51, 52, 59, 61, 68 },
-    {39, 46, 58, 63, 67, 68 } ,
-    { 48, 58 , 63 , 65, 68 },
-    {41, 48, 58 , 63, 67 } ,
-    {41, 48, 57, 62, 65 },
-    {46 , 53 , 60, 63, 68, 72, 73 },
-    { 44, 51, 58, 63, 68, 72 , 73 },
-    { 43, 50 , 58 , 60 , 65 , 70,  72 , 73 },
-    { 42, 49 , 56 , 60 , 65 , 70,  72 , 73 },
-    { 46, 53 , 60  , 65 , 70,  72 , 73 },
-    {46 , 53 , 60, 63, 68, 72, 73 },
-    { 44, 51, 58, 63, 68, 72 , 73 },
-    { 43, 50 , 58 , 60 , 65 , 70,  72 , 73 },
-    { 42, 49 , 56 , 60 , 65 , 70,  72 , 73 },
-    { 46, 53 , 60  , 65 , 70,  72 , 73 },
-    { 41, 48 , 55 ,56 ,58 , 63}
-};
-
-
 //==============================================================================
-const String WaylochorderAudioProcessor::getName() const
+const String WayloMidiLatchAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool WaylochorderAudioProcessor::acceptsMidi() const
+bool WayloMidiLatchAudioProcessor::acceptsMidi() const
 {
-#if JucePlugin_WantsMidiInput
+   #if JucePlugin_WantsMidiInput
     return true;
-#else
+   #else
     return false;
-#endif
+   #endif
 }
 
-bool WaylochorderAudioProcessor::producesMidi() const
+bool WayloMidiLatchAudioProcessor::producesMidi() const
 {
-#if JucePlugin_ProducesMidiOutput
+   #if JucePlugin_ProducesMidiOutput
     return true;
-#else
+   #else
     return false;
-#endif
+   #endif
 }
 
-bool WaylochorderAudioProcessor::isMidiEffect() const
+bool WayloMidiLatchAudioProcessor::isMidiEffect() const
 {
-#if JucePlugin_IsMidiEffect
+   #if JucePlugin_IsMidiEffect
     return true;
-#else
+   #else
     return false;
-#endif
+   #endif
 }
 
-double WaylochorderAudioProcessor::getTailLengthSeconds() const
+double WayloMidiLatchAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int WaylochorderAudioProcessor::getNumPrograms()
+int WayloMidiLatchAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-    // so this should be at least 1, even if you're not really implementing programs.
+                // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int WaylochorderAudioProcessor::getCurrentProgram()
+int WayloMidiLatchAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void WaylochorderAudioProcessor::setCurrentProgram (int index)
+void WayloMidiLatchAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String WaylochorderAudioProcessor::getProgramName (int index)
+const String WayloMidiLatchAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void WaylochorderAudioProcessor::changeProgramName (int index, const String& newName)
+void WayloMidiLatchAudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void WaylochorderAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void WayloMidiLatchAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -156,88 +119,81 @@ void WaylochorderAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     
 }
 
-void WaylochorderAudioProcessor::releaseResources()
+void WayloMidiLatchAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool WaylochorderAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool WayloMidiLatchAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-#if JucePlugin_IsMidiEffect
+  #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
     return true;
-#else
+  #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-        && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
         return false;
-    
+
     // This checks if the input layout matches the output layout
-#if ! JucePlugin_IsSynth
+   #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-#endif
-    
+   #endif
+
     return true;
-#endif
+  #endif
 }
 #endif
 
-void WaylochorderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void WayloMidiLatchAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     jassert (buffer.getNumChannels() == 0);
     auto numSamples = buffer.getNumSamples();
-
-
-        MidiMessage m;
-        MidiMessage n;
-    
-        buffer.clear();
+    MidiMessage m;
+    MidiMessage n;
+    buffer.clear();
     
     
-        MidiBuffer processedMidi;
-        int time;
-        for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
+    MidiBuffer processedMidi;
+    int time;
+    for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
+    {
+        if (m.isNoteOn())
         {
-            if (m.isNoteOn())
-            {
-                // note off for any playing notes
-                for ( int j = 0 ; j < 127; j++)
-                { if (playing[j] == 1) {
-                    n = MidiMessage::noteOff(m.getChannel(), j);
-                    processedMidi.addEvent(n, time);
-                    playing[j] = 0;
-                }
-                }
-
+            // note off for any playing notes
+            for ( int j = 0 ; j < 127; j++)
+            { if (playing[j] == 1) {
+                n = MidiMessage::noteOff(m.getChannel(), j);
+                processedMidi.addEvent(n, time);
+                playing[j] = 0;
             }
-                else if (m.isNoteOff()) {
-                    
-                    int note = m.getNoteNumber();
-                    // if a note is not playing send a note on and set it to "playing"
-                    if (playing[note] == 0){
-                    n = MidiMessage::noteOn(m.getChannel(), note, 127.0f);
-                    processedMidi.addEvent(n, time);
-                        playing[note] = 1;
-                    }
-                    
-
-                }
+            }
+        }
+        else if (m.isNoteOff()) {
             
-            else if (m.isAftertouch())
-            {
+            int note = m.getNoteNumber();
+            // if a note is not playing send a note on and set it to "playing"
+            if (playing[note] == 0){
+                n = MidiMessage::noteOn(m.getChannel(), note, 127.0f);
+                processedMidi.addEvent(n, time);
+                playing[note] = 1;
             }
-            else if (m.isPitchWheel())
-            {
-            }
-
-            
+        }
+        
+        else if (m.isAftertouch())
+        {
+        }
+        else if (m.isPitchWheel())
+        {
+        }
+        
     }
     midiMessages.swapWith  (processedMidi) ;
     
@@ -256,27 +212,26 @@ void WaylochorderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 }
 
 
-
 //==============================================================================
-bool WaylochorderAudioProcessor::hasEditor() const
+bool WayloMidiLatchAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* WaylochorderAudioProcessor::createEditor()
+AudioProcessorEditor* WayloMidiLatchAudioProcessor::createEditor()
 {
-    return new WaylochorderAudioProcessorEditor (*this);
+    return new WayloMidiLatchAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void WaylochorderAudioProcessor::getStateInformation (MemoryBlock& destData)
+void WayloMidiLatchAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void WaylochorderAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void WayloMidiLatchAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -286,6 +241,5 @@ void WaylochorderAudioProcessor::setStateInformation (const void* data, int size
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new WaylochorderAudioProcessor();
+    return new WayloMidiLatchAudioProcessor();
 }
-
